@@ -1,19 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: study
+  name: my-go-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: study
+      app: my-go-app
   template:
     metadata:
       labels:
-        app: study
+        app: my-go-app
     spec:
+      imagePullSecrets:
+        - name: my-registry-secret
       containers:
-        - name: study
-          image: my-docker-repo/my-app:latest
-          ports:
-            - containerPort: 8080
+        - name: my-go-app
+          image: crpi-13j8dbuyvy0s82p4.cn-hangzhou.personal.cr.aliyuncs.com/zjj_go_repo/go_repo:latest # 替换为你的镜像
+          volumeMounts:
+            - name: config-volume
+              mountPath: /
+      volumes:
+        - name: config-volume
+          configMap:
+            name: my-config
