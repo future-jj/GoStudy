@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: study
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: study
+  template:
+    metadata:
+      labels:
+        app: study
+    spec:
+      containers:
+        - name: study
+          image: my-docker-repo/my-app:latest
+          ports:
+            - containerPort: 8080
