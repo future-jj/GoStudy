@@ -3,10 +3,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -35,10 +31,6 @@ func handleGoodbye(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func welcome(w http.ResponseWriter, r *http.Request) {
-
-}
-
 type Config struct {
 	Port int    `yaml:"port"`
 	Host string `yaml:"host"`
@@ -50,21 +42,21 @@ func main() {
 	http.HandleFunc("/hello", handleHello)
 	http.HandleFunc("/goodbye", handleGoodbye)
 
-	config := Config{}
-
-	// 读取 YAML 配置文件
-	data, err := ioutil.ReadFile("config.yaml") // 挂载的路径
-	if err != nil {
-		log.Fatalf("error: %v", err)
-	}
-
-	// 解析 YAML
-	err = yaml.Unmarshal(data, &config)
-	if err != nil {
-		log.Fatalf("error: %v", err)
-	}
-
-	fmt.Printf("Host: %s, Port: %d\n", config.Host, config.Port)
+	//config := Config{}
+	//
+	//// 读取 YAML 配置文件
+	//data, err := ioutil.ReadFile("config.yaml") // 挂载的路径
+	//if err != nil {
+	//	log.Fatalf("error: %v", err)
+	//}
+	//
+	//// 解析 YAML
+	//err = yaml.Unmarshal(data, &config)
+	//if err != nil {
+	//	log.Fatalf("error: %v", err)
+	//}
+	//
+	//fmt.Printf("Host: %s, Port: %d\n", config.Host, config.Port)
 
 	time.Sleep(100000)
 }
