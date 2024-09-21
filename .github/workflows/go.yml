@@ -21,7 +21,7 @@ jobs:
 
       - name: Build
         run: |
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v ./...
+          go mod download && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
       - name: Test
         run: go test -v ./...
