@@ -3,8 +3,8 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
-	"time"
 )
 
 // 定义一个简单的响应结构体
@@ -31,32 +31,22 @@ func handleGoodbye(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-type Config struct {
-	Port int    `yaml:"port"`
-	Host string `yaml:"host"`
+// 健康检查
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+	response := Response{Message: "OK"}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
 }
 
 func main() {
-
 	http.HandleFunc("/", handleHome)
 	http.HandleFunc("/hello", handleHello)
 	http.HandleFunc("/goodbye", handleGoodbye)
+	http.HandleFunc("/health", handleHealth) // 增加健康检查路由
 
-	//config := Config{}
-	//
-	//// 读取 YAML 配置文件
-	//data, err := ioutil.ReadFile("config.yaml") // 挂载的路径
-	//if err != nil {
-	//	log.Fatalf("error: %v", err)
-	//}
-	//
-	//// 解析 YAML
-	//err = yaml.Unmarshal(data, &config)
-	//if err != nil {
-	//	log.Fatalf("error: %v", err)
-	//}
-	//
-	//fmt.Printf("Host: %s, Port: %d\n", config.Host, config.Port)
-
-	time.Sleep(100000)
+	// 启动 HTTP 服务器
+	log.Println("Starting server on :8080")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal(err)
+	}
 }
