@@ -1,20 +1,25 @@
-# 使用 Go 的官方镜像作为基础
+# 使用官方 Golang 镜像进行构建
 FROM golang:1.23 AS builder
 
 # 设置工作目录
 WORKDIR /app
 
-# 复制源码
+# 复制 go.mod 和 go.sum
+COPY go.mod go.sum ./
+RUN go mod download
+
+# 复制代码并构建
 COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
 
-# 编译应用
-RUN go build -o main .
-
-# 使用轻量级的镜像
+# 使用轻量级的基础镜像
 FROM alpine:latest
 
-# 复制编译后的二进制文件
+# 设置工作目录
+WORKDIR /root/
+
+# 从构建阶段复制二进制文件
 COPY --from=builder /app/main .
 
-# 指定运行的命令
+# 运行应用
 CMD ["./main"]
