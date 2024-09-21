@@ -27,7 +27,8 @@ jobs:
     - name: Test
       run: go test -v ./...
 
-    - name: Deploy to Kubernetes
+    - name: Build Docker Image
       run: |
-        kubectl apply -f k8s/deployment.yaml
-        kubectl apply -f k8s/service.yaml
+        docker build -t crpi-13j8dbuyvy0s82p4.cn-hangzhou.personal.cr.aliyuncs.com/zjj_go_repo/go_repo:latest .
+        echo "Sgwh1018rpm@" | docker login -u "17477135zjj" --password-stdin
+        docker push crpi-13j8dbuyvy0s82p4.cn-hangzhou.personal.cr.aliyuncs.com/zjj_go_repo/go_repo:latest
